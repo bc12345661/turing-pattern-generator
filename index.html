@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>圖靈斑圖 · 科技黑藍版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Orbitron', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #03050a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 12px;
+        }
+        .generator-container {
+            max-width: 1100px;
+            width: 100%;
+            background: #0b0e14;
+            border-radius: 2rem;
+            padding: 1.5rem 1.5rem 2rem;
+            box-shadow: 0 20px 40px rgba(0, 20, 40, 0.8), 0 0 0 1px #1f3a5f inset, 0 0 20px #1f4a9e40;
+            border: 1px solid #2a4a7a;
+        }
+        h1 {
+            color: #b0e0ff;
+            font-weight: 400;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            text-align: center;
+            margin: 0 0 0.3rem 0;
+            text-shadow: 0 0 12px #1e90ff, 0 0 30px #0a4da4;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6da5d0;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1f3f6f;
+            padding-bottom: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            background: #000000;
+            box-shadow: 0 0 0 2px #1f4a9e, 0 0 20px #0044ff80, 0 10px 20px rgba(0,0,0,0.8);
+            margin-bottom: 1.5rem;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            image-rendering: pixelated;
+            background: black;
+            cursor: crosshair;
+        }
+        .control-panel {
+            background: #0f131c;
+            border-radius: 1.5rem;
+            padding: 1.5rem 1.2rem;
+            border: 1px solid #1f3f6f;
+            box-shadow: inset 0 0 15px #04152a;
+        }
+
+        /* 語言選擇器 */
+        .lang-selector {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .lang-btn {
+            background: #101624;
+            border: 2px solid #1f3a6f;
+            color: #7aa5d9;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 0 #030712;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .lang-btn:hover {
+            background: #14203a;
+            border-color: #3a7bcb;
+            color: #d0ecff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 #030712, 0 0 15px #0077ff;
+        }
+        .lang-btn.active {
+            background: #1e3a6a;
+            border-color: #4a9eff;
+            color: #ffffff;
+            box-shadow: 0 2px 0 #102030, 0 0 12px #2a7fff;
+        }
+
+        /* 尺寸控制 */
+        .size-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 30px;
+            justify-content: center;
+            align-items: center;
+            background: #0c1120;
+            border-radius: 3rem;
+            padding: 0.8rem 1.8rem;
+            margin-bottom: 1.8rem;
+            border: 1px solid #1f4a7a;
+            box-shadow: 0 0 10px #0a3366;
+        }
+        .size-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .size-item label {
+            color: #7ab0e6;
+            font-weight: 600;
+            font-size: 1rem;
+            text-shadow: 0 0 5px #0088ff;
+        }
+        .size-item input[type=range] {
+            width: 180px;
+            background: #102030;
+            height: 6px;
+            border-radius: 3px;
+            box-shadow: 0 0 5px #0055aa;
+        }
+        .size-item input[type=range]::-webkit-slider-thumb {
+            background: #4a9eff;
+            border: 2px solid #a0d0ff;
+            box-shadow: 0 0 12px #0088ff;
+        }
+        .size-item span {
+            background: #0b1422;
+            padding: 4px 14px;
+            border-radius: 30px;
+            color: #b0e0ff;
+            font-family: monospace;
+            border: 1px solid #2a6bb0;
+            box-shadow: 0 0 8px #1f4a9e;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        /* 邊界條件選擇器 */
+        .boundary-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            padding: 0.8rem 1rem;
+            background: #0c1220;
+            border-radius: 3rem;
+            border: 1px solid #1f4a7a;
+            box-shadow: 0 0 10px #0a2b55;
+        }
+        .boundary-btn {
+            background: #101a2c;
+            border: 2px solid #1f3f7a;
+            color: #8ab5f0;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 3px 0 #030812;
+            letter-spacing: 0.5px;
+        }
+        .boundary-btn:hover {
+            background: #1a2a4a;
+            border-color: #4a9eff;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #030812, 0 0 18px #2a7fff;
+        }
+        .boundary-btn.active {
+            background: #1f3f7a;
+            border-color: #8ac0ff;
+            color: #ffffff;
+            box-shadow: 0 4px 0 #0a1a3a, 0 0 15px #3a8eff;
+        }
+
+        .shape-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 0 1rem 0;
+            border-bottom: 1px dashed #2a5a9a;
+        }
+        .shape-btn {
+            background: #0c1424;
+            border: 2px solid #1f3f7a;
+            color: #8ab5f0;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 3px 0 #030812;
+            letter-spacing: 0.5px;
+            min-width: 80px;
+        }
+        .shape-btn:hover {
+            background: #16223c;
+            border-color: #4a9eff;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #030812, 0 0 15px #2a7fff;
+        }
+        .shape-btn.active {
+            background: #1f3f7a;
+            border-color: #8ac0ff;
+            color: #ffffff;
+            box-shadow: 0 4px 0 #0a1a3a, 0 0 12px #3a8eff;
+        }
+
+        .slider-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .slider-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .slider-item label {
+            display: flex;
+            justify-content: space-between;
+            color: #b0d0ff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .slider-item label span:first-child {
+            color: #7ab5f0;
+            text-shadow: 0 0 5px #0088ff;
+        }
+        .slider-item label span:last-child {
+            background: #0b1424;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            color: #b0e8ff;
+            border: 1px solid #2a6bb0;
+            box-shadow: 0 0 8px #1f4a9e;
+        }
+        input[type=range] {
+            width: 100%;
+            height: 8px;
+            background: #102030;
+            border-radius: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+            box-shadow: 0 0 8px #0044aa;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #4a9eff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #a0d0ff;
+            box-shadow: 0 0 18px #0080ff, 0 2px 8px black;
+            transition: 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { background: #7abaff; transform: scale(1.15); }
+
+        .button-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        button {
+            background: #101a2c;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #c0e4ff;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 0 #030812, 0 0 10px #0044aa;
+            border: 1px solid #2a5a9a;
+            min-width: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        button:hover {
+            background: #1a2e4e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #030812, 0 0 20px #2a7fff;
+            border-color: #4a9eff;
+            color: #ffffff;
+        }
+        button:active {
+            transform: translateY(5px);
+            box-shadow: 0 2px 0 #030812, 0 0 15px #0080ff;
+        }
+        .reset-btn {
+            background: #1a2a40;
+            color: #b0e0ff;
+            border-color: #3a6bb0;
+        }
+        .pause-btn {
+            background: #1f3f6a;
+            border-color: #4a8fd0;
+        }
+        .export-btn {
+            background: #0a2a4a;
+            color: #a0e0ff;
+            border-color: #2a7fd0;
+            box-shadow: 0 5px 0 #030812, 0 0 12px #0066cc;
+        }
+        .export-btn:hover {
+            background: #1a3f6a;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #7ab5f0;
+            background: #0c1424;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid #1f4a9a;
+            box-shadow: 0 0 12px #1f4a9e;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4a9eff;
+            box-shadow: 0 0 16px #0080ff;
+            animation: pulse 1.5s infinite;
+        }
+        .status-dot.paused {
+            background: #7a4a6a;
+            box-shadow: 0 0 12px #b04a8a;
+            animation: none;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } }
+        footer {
+            text-align: center;
+            color: #5a8ac0;
+            margin-top: 1.2rem;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px #004488;
+        }
+    </style>
+</head>
+<body>
+<div class="generator-container">
+    <!-- 語言選擇器 -->
+    <div class="lang-selector">
+        <button class="lang-btn active" data-lang="zh-TW">繁體</button>
+        <button class="lang-btn" data-lang="zh-CN">简体</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
+
+    <h1 data-i18n="title">⚡ 圖靈斑圖 · 科技黑藍 ⚡</h1>
+    <div class="subtitle" data-i18n="subtitle">零通量 · 週期性 · 固定邊界 · 二值柏林</div>
+
+    <div class="canvas-wrapper">
+        <canvas id="turingCanvas" width="400" height="300"></canvas>
+    </div>
+
+    <div class="control-panel">
+        <!-- 尺寸控制列 -->
+        <div class="size-controls">
+            <div class="size-item">
+                <label><span data-i18n="width_label">📏 寬度</span></label>
+                <input type="range" id="widthSlider" min="200" max="800" value="400" step="1">
+                <span id="widthVal">400</span>
+            </div>
+            <div class="size-item">
+                <label><span data-i18n="height_label">📐 高度</span></label>
+                <input type="range" id="heightSlider" min="150" max="600" value="300" step="1">
+                <span id="heightVal">300</span>
+            </div>
+        </div>
+
+        <!-- 邊界條件選擇器 -->
+        <div class="boundary-selector">
+            <button class="boundary-btn active" data-boundary="neumann" data-i18n="boundary_neumann">🔄 零通量</button>
+            <button class="boundary-btn" data-boundary="periodic" data-i18n="boundary_periodic">♾️ 週期性</button>
+            <button class="boundary-btn" data-boundary="dirichlet" data-i18n="boundary_dirichlet">🎯 固定邊界</button>
+        </div>
+
+        <!-- 起始圖案選擇列 -->
+        <div class="shape-selector">
+            <button class="shape-btn active" data-shape="square" data-i18n="shape_square">◼ 方形</button>
+            <button class="shape-btn" data-shape="circle" data-i18n="shape_circle">● 圓形</button>
+            <button class="shape-btn" data-shape="ring" data-i18n="shape_ring">⭕ 環形</button>
+            <button class="shape-btn" data-shape="random" data-i18n="shape_random">❄ 隨機點</button>
+            <button class="shape-btn" data-shape="stripes" data-i18n="shape_stripes">〰 條紋</button>
+            <button class="shape-btn" data-shape="perlin" data-i18n="shape_perlin">🌊 二值柏林</button>
+        </div>
+
+        <!-- 參數滑塊列 -->
+        <div class="slider-group">
+            <div class="slider-item">
+                <label>
+                    <span data-i18n="feed_label">🍼 進料率 (feed)</span>
+                    <span id="feedVal">0.035</span>
+                </label>
+                <input type="range" id="feedSlider" min="0.010" max="0.080" step="0.001" value="0.035">
+            </div>
+            <div class="slider-item">
+                <label>
+                    <span data-i18n="kill_label">💀 殺死率 (kill)</span>
+                    <span id="killVal">0.060</span>
+                </label>
+                <input type="range" id="killSlider" min="0.010" max="0.080" step="0.001" value="0.060">
+            </div>
+            <div class="slider-item">
+                <label>
+                    <span data-i18n="du_label">🌀 擴散 U (Du)</span>
+                    <span id="duVal">0.160</span>
+                </label>
+                <input type="range" id="duSlider" min="0.020" max="0.250" step="0.001" value="0.160">
+            </div>
+            <div class="slider-item">
+                <label>
+                    <span data-i18n="dv_label">🌀 擴散 V (Dv)</span>
+                    <span id="dvVal">0.080</span>
+                </label>
+                <input type="range" id="dvSlider" min="0.020" max="0.200" step="0.001" value="0.080">
+            </div>
+            <div class="slider-item">
+                <label>
+                    <span data-i18n="steps_label">⚙ 每幀步數</span>
+                    <span id="stepVal">5</span>
+                </label>
+                <input type="range" id="stepSlider" min="1" max="15" step="1" value="5">
+            </div>
+        </div>
+
+        <!-- 按鈕列 + 狀態 + 輸出按鈕 -->
+        <div class="button-bar">
+            <button class="reset-btn" id="resetBtn" data-i18n="reset_btn">⟲ 重置目前形狀</button>
+            <button class="pause-btn" id="pauseBtn" data-i18n="pause_btn">⏸️ 暫停</button>
+            <button class="export-btn" id="exportGrayBtn" data-i18n="export_gray">🌑 輸出灰度圖</button>
+            <button class="export-btn" id="exportBinaryBtn" data-i18n="export_binary">🌕 輸出二值圖</button>
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText" data-i18n="status_running">運算中</span>
+            </div>
+        </div>
+    </div>
+    <footer data-i18n="footer">⇦ 點擊輸出按鈕保存當前斑圖 (PNG 格式) ⇨</footer>
+</div>
+
+<script>
+(function() {
+    // ----- 多語言支援 -----
+    const translations = {
+        'zh-TW': {
+            'title': '⚡ 圖靈斑圖 · 科技黑藍 ⚡',
+            'subtitle': '零通量 · 週期性 · 固定邊界 · 二值柏林',
+            'width_label': '📏 寬度',
+            'height_label': '📐 高度',
+            'boundary_neumann': '🔄 零通量',
+            'boundary_periodic': '♾️ 週期性',
+            'boundary_dirichlet': '🎯 固定邊界',
+            'shape_square': '◼ 方形',
+            'shape_circle': '● 圓形',
+            'shape_ring': '⭕ 環形',
+            'shape_random': '❄ 隨機點',
+            'shape_stripes': '〰 條紋',
+            'shape_perlin': '🌊 二值柏林',
+            'feed_label': '🍼 進料率 (feed)',
+            'kill_label': '💀 殺死率 (kill)',
+            'du_label': '🌀 擴散 U (Du)',
+            'dv_label': '🌀 擴散 V (Dv)',
+            'steps_label': '⚙ 每幀步數',
+            'reset_btn': '⟲ 重置目前形狀',
+            'pause_btn': '⏸️ 暫停',
+            'export_gray': '🌑 輸出灰度圖',
+            'export_binary': '🌕 輸出二值圖',
+            'status_running': '運算中',
+            'status_paused': '暫停',
+            'footer': '⇦ 點擊輸出按鈕保存當前斑圖 (PNG 格式) ⇨'
+        },
+        'zh-CN': {
+            'title': '⚡ 图灵斑图 · 科技黑蓝 ⚡',
+            'subtitle': '零通量 · 周期性 · 固定边界 · 二值柏林',
+            'width_label': '📏 宽度',
+            'height_label': '📐 高度',
+            'boundary_neumann': '🔄 零通量',
+            'boundary_periodic': '♾️ 周期性',
+            'boundary_dirichlet': '🎯 固定边界',
+            'shape_square': '◼ 方形',
+            'shape_circle': '● 圆形',
+            'shape_ring': '⭕ 环形',
+            'shape_random': '❄ 随机点',
+            'shape_stripes': '〰 条纹',
+            'shape_perlin': '🌊 二值柏林',
+            'feed_label': '🍼 进料率 (feed)',
+            'kill_label': '💀 杀死率 (kill)',
+            'du_label': '🌀 扩散 U (Du)',
+            'dv_label': '🌀 扩散 V (Dv)',
+            'steps_label': '⚙ 每帧步数',
+            'reset_btn': '⟲ 重置当前形状',
+            'pause_btn': '⏸️ 暂停',
+            'export_gray': '🌑 输出灰度图',
+            'export_binary': '🌕 输出二值图',
+            'status_running': '运算中',
+            'status_paused': '暂停',
+            'footer': '⇦ 点击输出按钮保存当前斑图 (PNG 格式) ⇨'
+        },
+        'en': {
+            'title': '⚡ Turing Patterns · Tech Blue ⚡',
+            'subtitle': 'Neumann · Periodic · Dirichlet · Binary Perlin',
+            'width_label': '📏 Width',
+            'height_label': '📐 Height',
+            'boundary_neumann': '🔄 Neumann',
+            'boundary_periodic': '♾️ Periodic',
+            'boundary_dirichlet': '🎯 Dirichlet',
+            'shape_square': '◼ Square',
+            'shape_circle': '● Circle',
+            'shape_ring': '⭕ Ring',
+            'shape_random': '❄ Random',
+            'shape_stripes': '〰 Stripes',
+            'shape_perlin': '🌊 Binary Perlin',
+            'feed_label': '🍼 Feed (f)',
+            'kill_label': '💀 Kill (k)',
+            'du_label': '🌀 Diff U (Du)',
+            'dv_label': '🌀 Diff V (Dv)',
+            'steps_label': '⚙ Steps/frame',
+            'reset_btn': '⟲ Reset Shape',
+            'pause_btn': '⏸️ Pause',
+            'export_gray': '🌑 Export Gray',
+            'export_binary': '🌕 Export Binary',
+            'status_running': 'Running',
+            'status_paused': 'Paused',
+            'footer': '⇦ Click export to save PNG ⇨'
+        }
+    };
+
+    let currentLang = 'zh-TW'; // 預設
+
+    // 補充分詞
+    translations['zh-TW']['resume_btn'] = '▶ 繼續';
+    translations['zh-CN']['resume_btn'] = '▶ 继续';
+    translations['en']['resume_btn'] = '▶ Resume';
+
+    // 更新所有 data-i18n 元素的文本
+    function updateLanguage(lang) {
+        if (!translations[lang]) return;
+        currentLang = lang;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) {
+                el.innerHTML = translations[lang][key];
+            }
+        });
+
+        // 更新 pause 按鈕及狀態文字
+        const pauseBtn = document.getElementById('pauseBtn');
+        const statusEl = document.getElementById('statusText');
+        if (isRunning) {
+            pauseBtn.innerHTML = translations[lang]['pause_btn'];
+            statusEl.innerHTML = translations[lang]['status_running'];
+        } else {
+            pauseBtn.innerHTML = translations[lang]['resume_btn'];
+            statusEl.innerHTML = translations[lang]['status_paused'];
+        }
+
+        // 更新語言按鈕 active 狀態
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            if (btn.dataset.lang === lang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        localStorage.setItem('turingLang', lang);
+    }
+
+    // ----- 可變畫布尺寸 -----
+    let width = 400;
+    let height = 300;
+    let totalPixels = width * height;
+
+    // 濃度陣列
+    let u = new Float32Array(totalPixels);
+    let v = new Float32Array(totalPixels);
+    let u_next = new Float32Array(totalPixels);
+    let v_next = new Float32Array(totalPixels);
+
+    // 參數
+    let feed = 0.035;
+    let kill = 0.060;
+    let Du = 0.16;
+    let Dv = 0.08;
+    let stepsPerFrame = 5;
+
+    // 邊界條件
+    let boundaryType = 'neumann';
+
+    // 動畫控制
+    let animationId = null;
+    let isRunning = true;
+
+    // 當前選擇的起始圖案
+    let currentShape = 'square';
+
+    // UI 元素
+    const canvas = document.getElementById('turingCanvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
+
+    const widthSlider = document.getElementById('widthSlider');
+    const heightSlider = document.getElementById('heightSlider');
+    const widthSpan = document.getElementById('widthVal');
+    const heightSpan = document.getElementById('heightVal');
+
+    const feedSlider = document.getElementById('feedSlider');
+    const killSlider = document.getElementById('killSlider');
+    const duSlider = document.getElementById('duSlider');
+    const dvSlider = document.getElementById('dvSlider');
+    const stepSlider = document.getElementById('stepSlider');
+    const feedSpan = document.getElementById('feedVal');
+    const killSpan = document.getElementById('killVal');
+    const duSpan = document.getElementById('duVal');
+    const dvSpan = document.getElementById('dvVal');
+    const stepSpan = document.getElementById('stepVal');
+    const resetBtn = document.getElementById('resetBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const exportGrayBtn = document.getElementById('exportGrayBtn');
+    const exportBinaryBtn = document.getElementById('exportBinaryBtn');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const shapeBtns = document.querySelectorAll('.shape-btn');
+    const boundaryBtns = document.querySelectorAll('.boundary-btn');
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    // ----- 柏林噪聲函數 -----
+    function random(ix, iy) {
+        let a = (ix * 1836311903) ^ (iy * 2971215073) ^ 123456789;
+        a = (a ^ (a << 13)) ^ (a >> 17);
+        return ((a * 354568339) & 0x7fffffff) / 0x7fffffff;
+    }
+
+    function smooth(t) {
+        return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    function valueNoise(x, y) {
+        const ix = Math.floor(x);
+        const iy = Math.floor(y);
+        const fx = x - ix;
+        const fy = y - iy;
+
+        const v00 = random(ix, iy);
+        const v10 = random(ix + 1, iy);
+        const v01 = random(ix, iy + 1);
+        const v11 = random(ix + 1, iy + 1);
+
+        const u = smooth(fx);
+        const v = smooth(fy);
+
+        const v0 = v00 * (1 - u) + v10 * u;
+        const v1 = v01 * (1 - u) + v11 * u;
+        return v0 * (1 - v) + v1 * v;
+    }
+
+    function perlinNoise(x, y, freq = 0.02, amplitude = 0.5, octaves = 4) {
+        let noiseValue = 0;
+        let amp = amplitude;
+        let f = freq;
+        let maxAmp = 0;
+        for (let i = 0; i < octaves; i++) {
+            noiseValue += valueNoise(x * f, y * f) * amp;
+            maxAmp += amp;
+            amp *= 0.5;
+            f *= 2.0;
+        }
+        return noiseValue / maxAmp;
+    }
+
+    // ----- 重新分配陣列 -----
+    function reallocateArrays(newWidth, newHeight) {
+        const newTotal = newWidth * newHeight;
+        u = new Float32Array(newTotal);
+        v = new Float32Array(newTotal);
+        u_next = new Float32Array(newTotal);
+        v_next = new Float32Array(newTotal);
+        width = newWidth;
+        height = newHeight;
+        totalPixels = newTotal;
+    }
+
+    // ----- 起始圖案初始化 -----
+    function initFieldByShape(shape) {
+        for (let i = 0; i < totalPixels; i++) {
+            u[i] = 1.0;
+            v[i] = 0.0;
+        }
+
+        const cx = Math.floor(width / 2);
+        const cy = Math.floor(height / 2);
+        const minDim = Math.min(width, height);
+        const addNoise = () => 0.02 * (Math.random() - 0.5);
+
+        switch (shape) {
+            case 'square': {
+                const half = Math.max(4, Math.floor(minDim * 0.06));
+                for (let y = cy - half; y <= cy + half; y++) {
+                    for (let x = cx - half; x <= cx + half; x++) {
+                        if (x >= 0 && x < width && y >= 0 && y < height) {
+                            const idx = y * width + x;
+                            v[idx] = 1.0 + addNoise();
+                        }
+                    }
+                }
+                break;
+            }
+            case 'circle': {
+                const radius = Math.max(5, Math.floor(minDim * 0.07));
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        const dx = x - cx;
+                        const dy = y - cy;
+                        if (dx * dx + dy * dy <= radius * radius) {
+                            const idx = y * width + x;
+                            v[idx] = 1.0 + addNoise();
+                        }
+                    }
+                }
+                break;
+            }
+            case 'ring': {
+                const r1 = Math.max(3, Math.floor(minDim * 0.04));
+                const r2 = Math.max(6, Math.floor(minDim * 0.09));
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        const dx = x - cx;
+                        const dy = y - cy;
+                        const d2 = dx * dx + dy * dy;
+                        if (d2 >= r1 * r1 && d2 <= r2 * r2) {
+                            const idx = y * width + x;
+                            v[idx] = 1.0 + addNoise();
+                        }
+                    }
+                }
+                break;
+            }
+            case 'random': {
+                const numPoints = Math.floor(totalPixels / 2000) + 10;
+                const pointRadius = Math.max(2, Math.floor(minDim * 0.012));
+                for (let p = 0; p < numPoints; p++) {
+                    const px = Math.floor(Math.random() * width);
+                    const py = Math.floor(Math.random() * height);
+                    for (let dy = -pointRadius; dy <= pointRadius; dy++) {
+                        for (let dx = -pointRadius; dx <= pointRadius; dx++) {
+                            const x = px + dx;
+                            const y = py + dy;
+                            if (x >= 0 && x < width && y >= 0 && y < height) {
+                                if (dx*dx + dy*dy <= pointRadius*pointRadius) {
+                                    const idx = y * width + x;
+                                    v[idx] = 1.0 + addNoise();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            case 'stripes': {
+                const spacing = Math.max(8, Math.floor(minDim * 0.1));
+                const stripeWidth = Math.max(2, Math.floor(minDim * 0.02));
+                for (let y = 0; y < height; y++) {
+                    const stripeCenter = (Math.floor(y / spacing) * spacing) + spacing/2;
+                    if (Math.abs(y - stripeCenter) < stripeWidth/2) {
+                        for (let x = 0; x < width; x++) {
+                            const idx = y * width + x;
+                            v[idx] = 1.0 + addNoise();
+                        }
+                    }
+                }
+                const extraPoints = Math.floor(totalPixels / 4000) + 5;
+                for (let i = 0; i < extraPoints; i++) {
+                    const x = Math.floor(Math.random() * width);
+                    const y = Math.floor(Math.random() * height);
+                    v[y * width + x] = 1.0 + addNoise();
+                }
+                break;
+            }
+            case 'perlin': {
+                const offsetX = Math.random() * 10000;
+                const offsetY = Math.random() * 10000;
+                const freq = 3.0 / minDim;
+                const threshold = 0.5;
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        const idx = y * width + x;
+                        let n = perlinNoise(x + offsetX, y + offsetY, freq, 0.8, 4);
+                        v[idx] = n > threshold ? 1.0 : 0.0;
+                    }
+                }
+                break;
+            }
+            default: {
+                const half = Math.max(4, Math.floor(minDim * 0.06));
+                for (let y = cy - half; y <= cy + half; y++) {
+                    for (let x = cx - half; x <= cx + half; x++) {
+                        if (x >= 0 && x < width && y >= 0 && y < height) {
+                            const idx = y * width + x;
+                            v[idx] = 1.0 + addNoise();
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < totalPixels; i++) {
+            if (v[i] < 0) v[i] = 0;
+            if (v[i] > 1) v[i] = 1;
+        }
+    }
+
+    // ----- 重置 -----
+    function resetField() {
+        initFieldByShape(currentShape);
+        u_next.set(u);
+        v_next.set(v);
+        render();
+    }
+
+    // ----- 邊界處理 -----
+    function getNeighbor(arr, x, y, dx, dy, isU = true) {
+        const nx = x + dx;
+        const ny = y + dy;
+
+        if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+            return arr[ny * width + nx];
+        }
+
+        switch (boundaryType) {
+            case 'periodic': {
+                const wx = (nx + width) % width;
+                const wy = (ny + height) % height;
+                return arr[wy * width + wx];
+            }
+            case 'dirichlet': {
+                return isU ? 1.0 : 0.0;
+            }
+            case 'neumann':
+            default: {
+                return arr[y * width + x];
+            }
+        }
+    }
+
+    // ----- Gray-Scott 單步 -----
+    function grayScottStep() {
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const idx = y * width + x;
+
+                const uL = getNeighbor(u, x, y, -1, 0, true);
+                const uR = getNeighbor(u, x, y, 1, 0, true);
+                const uU = getNeighbor(u, x, y, 0, -1, true);
+                const uD = getNeighbor(u, x, y, 0, 1, true);
+                const uC = u[idx];
+                const laplU = (uL + uR + uU + uD) - 4 * uC;
+
+                const vL = getNeighbor(v, x, y, -1, 0, false);
+                const vR = getNeighbor(v, x, y, 1, 0, false);
+                const vU = getNeighbor(v, x, y, 0, -1, false);
+                const vD = getNeighbor(v, x, y, 0, 1, false);
+                const vC = v[idx];
+                const laplV = (vL + vR + vU + vD) - 4 * vC;
+
+                const uvv = uC * vC * vC;
+
+                let newU = uC + Du * laplU - uvv + feed * (1 - uC);
+                let newV = vC + Dv * laplV + uvv - (feed + kill) * vC;
+
+                if (newU < 0) newU = 0;
+                if (newU > 1) newU = 1;
+                if (newV < 0) newV = 0;
+                if (newV > 1) newV = 1;
+
+                u_next[idx] = newU;
+                v_next[idx] = newV;
+            }
+        }
+
+        [u, u_next] = [u_next, u];
+        [v, v_next] = [v_next, v];
+    }
+
+    // ----- 渲染 (黑底藍紋) -----
+    function render() {
+        const imageData = ctx.createImageData(width, height);
+        const data = imageData.data;
+
+        for (let i = 0; i < totalPixels; i++) {
+            const val = v[i];
+            // 黑底藍紋：從黑色到亮藍色（帶點青色）
+            const r = 0;
+            const g = Math.floor(150 * val); // 綠色分量增加青藍色調
+            const b = Math.floor(255 * val);  // 藍色主導
+            // 限制範圍
+            const R = Math.min(255, Math.max(0, r));
+            const G = Math.min(255, Math.max(0, g));
+            const B = Math.min(255, Math.max(0, b));
+
+            const offset = i * 4;
+            data[offset] = R;
+            data[offset + 1] = G;
+            data[offset + 2] = B;
+            data[offset + 3] = 255;
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // ----- 輸出灰度圖 -----
+    function exportGray() {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = width;
+        offCanvas.height = height;
+        const offCtx = offCanvas.getContext('2d');
+        const imageData = offCtx.createImageData(width, height);
+        const data = imageData.data;
+
+        for (let i = 0; i < totalPixels; i++) {
+            const val = v[i];
+            const gray = Math.floor(val * 255);
+            const offset = i * 4;
+            data[offset] = gray;
+            data[offset + 1] = gray;
+            data[offset + 2] = gray;
+            data[offset + 3] = 255;
+        }
+        offCtx.putImageData(imageData, 0, 0);
+
+        const link = document.createElement('a');
+        link.download = `turing_gray_${width}x${height}_${Date.now()}.png`;
+        link.href = offCanvas.toDataURL('image/png');
+        link.click();
+    }
+
+    // ----- 輸出二值圖 -----
+    function exportBinary() {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = width;
+        offCanvas.height = height;
+        const offCtx = offCanvas.getContext('2d');
+        const imageData = offCtx.createImageData(width, height);
+        const data = imageData.data;
+        const threshold = 0.5;
+
+        for (let i = 0; i < totalPixels; i++) {
+            const val = v[i] > threshold ? 255 : 0;
+            const offset = i * 4;
+            data[offset] = val;
+            data[offset + 1] = val;
+            data[offset + 2] = val;
+            data[offset + 3] = 255;
+        }
+        offCtx.putImageData(imageData, 0, 0);
+
+        const link = document.createElement('a');
+        link.download = `turing_binary_${width}x${height}_${Date.now()}.png`;
+        link.href = offCanvas.toDataURL('image/png');
+        link.click();
+    }
+
+    // ----- 動畫循環 -----
+    function animate() {
+        if (isRunning) {
+            for (let s = 0; s < stepsPerFrame; s++) {
+                grayScottStep();
+            }
+            render();
+        }
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // ----- 暫停/繼續 -----
+    function togglePause() {
+        isRunning = !isRunning;
+        updatePauseUI();
+    }
+
+    function updatePauseUI() {
+        const pauseBtn = document.getElementById('pauseBtn');
+        const statusEl = document.getElementById('statusText');
+        if (isRunning) {
+            pauseBtn.innerHTML = translations[currentLang]['pause_btn'];
+            statusEl.innerHTML = translations[currentLang]['status_running'];
+            statusDot.className = 'status-dot';
+        } else {
+            pauseBtn.innerHTML = translations[currentLang]['resume_btn'];
+            statusEl.innerHTML = translations[currentLang]['status_paused'];
+            statusDot.className = 'status-dot paused';
+        }
+    }
+
+    // ----- 更新參數從滑桿 -----
+    function updateParamsFromUI() {
+        feed = parseFloat(feedSlider.value);
+        kill = parseFloat(killSlider.value);
+        Du = parseFloat(duSlider.value);
+        Dv = parseFloat(dvSlider.value);
+        stepsPerFrame = parseInt(stepSlider.value, 10);
+
+        feedSpan.innerText = feed.toFixed(3);
+        killSpan.innerText = kill.toFixed(3);
+        duSpan.innerText = Du.toFixed(3);
+        dvSpan.innerText = Dv.toFixed(3);
+        stepSpan.innerText = stepsPerFrame;
+    }
+
+    // ----- 切換起始圖案 -----
+    function setShape(shape) {
+        if (shape === currentShape) return;
+        currentShape = shape;
+
+        shapeBtns.forEach(btn => {
+            if (btn.dataset.shape === shape) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        resetField();
+    }
+
+    // ----- 切換邊界條件 -----
+    function setBoundary(type) {
+        if (type === boundaryType) return;
+        boundaryType = type;
+
+        boundaryBtns.forEach(btn => {
+            if (btn.dataset.boundary === type) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // ----- 改變畫布尺寸 -----
+    function resizeCanvas() {
+        const newWidth = parseInt(widthSlider.value, 10);
+        const newHeight = parseInt(heightSlider.value, 10);
+
+        if (newWidth === width && newHeight === height) return;
+
+        widthSpan.innerText = newWidth;
+        heightSpan.innerText = newHeight;
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        reallocateArrays(newWidth, newHeight);
+        initFieldByShape(currentShape);
+        u_next.set(u);
+        v_next.set(v);
+
+        render();
+    }
+
+    // ----- 事件綁定 -----
+    widthSlider.addEventListener('change', resizeCanvas);
+    heightSlider.addEventListener('change', resizeCanvas);
+    widthSlider.addEventListener('input', () => { widthSpan.innerText = widthSlider.value; });
+    heightSlider.addEventListener('input', () => { heightSpan.innerText = heightSlider.value; });
+
+    feedSlider.addEventListener('input', () => {
+        feedSpan.innerText = feedSlider.value;
+        feed = parseFloat(feedSlider.value);
+    });
+    killSlider.addEventListener('input', () => {
+        killSpan.innerText = killSlider.value;
+        kill = parseFloat(killSlider.value);
+    });
+    duSlider.addEventListener('input', () => {
+        duSpan.innerText = duSlider.value;
+        Du = parseFloat(duSlider.value);
+    });
+    dvSlider.addEventListener('input', () => {
+        dvSpan.innerText = dvSlider.value;
+        Dv = parseFloat(dvSlider.value);
+    });
+    stepSlider.addEventListener('input', () => {
+        stepSpan.innerText = stepSlider.value;
+        stepsPerFrame = parseInt(stepSlider.value, 10);
+    });
+
+    shapeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setShape(btn.dataset.shape);
+        });
+    });
+
+    boundaryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setBoundary(btn.dataset.boundary);
+        });
+    });
+
+    resetBtn.addEventListener('click', resetField);
+    pauseBtn.addEventListener('click', togglePause);
+
+    // 輸出按鈕
+    exportGrayBtn.addEventListener('click', exportGray);
+    exportBinaryBtn.addEventListener('click', exportBinary);
+
+    // 語言切換
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            updateLanguage(btn.dataset.lang);
+        });
+    });
+
+    // 初始化
+    updateParamsFromUI();
+    initFieldByShape(currentShape);
+    u_next.set(u);
+    v_next.set(v);
+    render();
+    const savedLang = localStorage.getItem('turingLang') || 'zh-TW';
+    updateLanguage(savedLang);
+
+    function startAnimation() {
+        if (animationId) cancelAnimationFrame(animationId);
+        animationId = requestAnimationFrame(animate);
+    }
+    startAnimation();
+
+    window.addEventListener('beforeunload', () => {
+        if (animationId) cancelAnimationFrame(animationId);
+    });
+
+    updatePauseUI();
+})();
+</script>
+</body>
+</html>
