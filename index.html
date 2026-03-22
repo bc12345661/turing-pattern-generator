@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>圖靈斑圖 · 科技黑藍版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>圖靈斑圖 · 科技黑藍 | 移動適配版</title>
     <style>
         * {
             box-sizing: border-box;
@@ -35,6 +35,7 @@
             text-align: center;
             margin: 0 0 0.3rem 0;
             text-shadow: 0 0 12px #1e90ff, 0 0 30px #0a4da4;
+            word-break: break-word;
         }
         .subtitle {
             text-align: center;
@@ -76,6 +77,7 @@
             justify-content: flex-end;
             gap: 10px;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
         .lang-btn {
             background: #101624;
@@ -90,6 +92,7 @@
             box-shadow: 0 2px 0 #030712;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         .lang-btn:hover {
             background: #14203a;
@@ -123,6 +126,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .size-item label {
             color: #7ab0e6;
@@ -179,6 +184,7 @@
             transition: 0.2s;
             box-shadow: 0 3px 0 #030812;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         .boundary-btn:hover {
             background: #1a2a4a;
@@ -216,6 +222,7 @@
             box-shadow: 0 3px 0 #030812;
             letter-spacing: 0.5px;
             min-width: 80px;
+            white-space: nowrap;
         }
         .shape-btn:hover {
             background: #16223c;
@@ -249,6 +256,7 @@
             font-size: 0.9rem;
             font-weight: 500;
             letter-spacing: 0.5px;
+            flex-wrap: wrap;
         }
         .slider-item label span:first-child {
             color: #7ab5f0;
@@ -312,6 +320,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            white-space: nowrap;
         }
         button:hover {
             background: #1a2e4e;
@@ -353,6 +362,7 @@
             font-size: 0.9rem;
             border: 1px solid #1f4a9a;
             box-shadow: 0 0 12px #1f4a9e;
+            white-space: nowrap;
         }
         .status-dot {
             width: 12px;
@@ -375,6 +385,98 @@
             font-size: 0.8rem;
             letter-spacing: 1px;
             text-shadow: 0 0 5px #004488;
+        }
+
+        /* 移動端適配 */
+        @media (max-width: 680px) {
+            .generator-container {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.4rem;
+                letter-spacing: 2px;
+            }
+            .subtitle {
+                font-size: 0.8rem;
+            }
+            .size-controls {
+                gap: 15px;
+                padding: 0.8rem 1rem;
+            }
+            .size-item {
+                gap: 8px;
+                flex: 1 1 auto;
+                justify-content: space-between;
+            }
+            .size-item input[type=range] {
+                width: 140px;
+            }
+            .boundary-selector {
+                gap: 8px;
+                padding: 0.6rem 0.8rem;
+            }
+            .boundary-btn {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+                white-space: normal;
+                word-break: keep-all;
+            }
+            .shape-selector {
+                gap: 8px;
+            }
+            .shape-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                min-width: 65px;
+                white-space: nowrap;
+            }
+            .slider-group {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .slider-item label {
+                font-size: 0.85rem;
+            }
+            .button-bar {
+                gap: 10px;
+            }
+            button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+                min-width: auto;
+                white-space: nowrap;
+            }
+            .status-indicator {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .lang-btn {
+                padding: 4px 12px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .size-item {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .size-item input[type=range] {
+                flex: 1;
+                min-width: 120px;
+            }
+            .boundary-btn, .shape-btn {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+            button {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+            .status-indicator {
+                padding: 5px 12px;
+            }
         }
     </style>
 </head>
@@ -433,14 +535,14 @@
                     <span data-i18n="feed_label">🍼 進料率 (feed)</span>
                     <span id="feedVal">0.035</span>
                 </label>
-                <input type="range" id="feedSlider" min="0.010" max="0.080" step="0.001" value="0.035">
+                <input type="range" id="feedSlider" min="0.010" max="0.10" step="0.0001" value="0.035">
             </div>
             <div class="slider-item">
                 <label>
                     <span data-i18n="kill_label">💀 殺死率 (kill)</span>
                     <span id="killVal">0.060</span>
                 </label>
-                <input type="range" id="killSlider" min="0.010" max="0.080" step="0.001" value="0.060">
+                <input type="range" id="killSlider" min="0.010" max="0.100" step="0.0001" value="0.060">
             </div>
             <div class="slider-item">
                 <label>
@@ -482,7 +584,7 @@
 
 <script>
 (function() {
-    // ----- 多語言支援 -----
+    // 多語言支援 (與之前相同，此處省略冗餘，保持功能一致)
     const translations = {
         'zh-TW': {
             'title': '⚡ 圖靈斑圖 · 科技黑藍 ⚡',
@@ -566,27 +668,18 @@
             'footer': '⇦ Click export to save PNG ⇨'
         }
     };
-
-    let currentLang = 'zh-TW'; // 預設
-
-    // 補充分詞
     translations['zh-TW']['resume_btn'] = '▶ 繼續';
     translations['zh-CN']['resume_btn'] = '▶ 继续';
     translations['en']['resume_btn'] = '▶ Resume';
 
-    // 更新所有 data-i18n 元素的文本
+    let currentLang = 'zh-TW';
     function updateLanguage(lang) {
         if (!translations[lang]) return;
         currentLang = lang;
-
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) {
-                el.innerHTML = translations[lang][key];
-            }
+            if (translations[lang][key]) el.innerHTML = translations[lang][key];
         });
-
-        // 更新 pause 按鈕及狀態文字
         const pauseBtn = document.getElementById('pauseBtn');
         const statusEl = document.getElementById('statusText');
         if (isRunning) {
@@ -596,579 +689,121 @@
             pauseBtn.innerHTML = translations[lang]['resume_btn'];
             statusEl.innerHTML = translations[lang]['status_paused'];
         }
-
-        // 更新語言按鈕 active 狀態
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            if (btn.dataset.lang === lang) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+            if (btn.dataset.lang === lang) btn.classList.add('active');
+            else btn.classList.remove('active');
         });
-
         localStorage.setItem('turingLang', lang);
     }
 
-    // ----- 可變畫布尺寸 -----
-    let width = 400;
-    let height = 300;
-    let totalPixels = width * height;
-
-    // 濃度陣列
-    let u = new Float32Array(totalPixels);
-    let v = new Float32Array(totalPixels);
-    let u_next = new Float32Array(totalPixels);
-    let v_next = new Float32Array(totalPixels);
-
-    // 參數
-    let feed = 0.035;
-    let kill = 0.060;
-    let Du = 0.16;
-    let Dv = 0.08;
-    let stepsPerFrame = 5;
-
-    // 邊界條件
+    // ----- 核心演算法 (與之前完全相同，此處僅保留必要變數與函數，避免冗長) -----
+    let width = 400, height = 300, totalPixels = width * height;
+    let u = new Float32Array(totalPixels), v = new Float32Array(totalPixels);
+    let u_next = new Float32Array(totalPixels), v_next = new Float32Array(totalPixels);
+    let feed = 0.035, kill = 0.060, Du = 0.16, Dv = 0.08, stepsPerFrame = 5;
     let boundaryType = 'neumann';
-
-    // 動畫控制
-    let animationId = null;
-    let isRunning = true;
-
-    // 當前選擇的起始圖案
+    let animationId = null, isRunning = true;
     let currentShape = 'square';
 
-    // UI 元素
     const canvas = document.getElementById('turingCanvas');
-    const ctx = canvas.getContext('2d', { willReadFrequently: false });
+    const ctx = canvas.getContext('2d');
 
-    const widthSlider = document.getElementById('widthSlider');
-    const heightSlider = document.getElementById('heightSlider');
-    const widthSpan = document.getElementById('widthVal');
-    const heightSpan = document.getElementById('heightVal');
-
-    const feedSlider = document.getElementById('feedSlider');
-    const killSlider = document.getElementById('killSlider');
-    const duSlider = document.getElementById('duSlider');
-    const dvSlider = document.getElementById('dvSlider');
-    const stepSlider = document.getElementById('stepSlider');
-    const feedSpan = document.getElementById('feedVal');
-    const killSpan = document.getElementById('killVal');
-    const duSpan = document.getElementById('duVal');
-    const dvSpan = document.getElementById('dvVal');
-    const stepSpan = document.getElementById('stepVal');
-    const resetBtn = document.getElementById('resetBtn');
-    const pauseBtn = document.getElementById('pauseBtn');
-    const exportGrayBtn = document.getElementById('exportGrayBtn');
-    const exportBinaryBtn = document.getElementById('exportBinaryBtn');
-    const statusDot = document.getElementById('statusDot');
-    const statusText = document.getElementById('statusText');
-    const shapeBtns = document.querySelectorAll('.shape-btn');
-    const boundaryBtns = document.querySelectorAll('.boundary-btn');
-    const langBtns = document.querySelectorAll('.lang-btn');
-
-    // ----- 柏林噪聲函數 -----
-    function random(ix, iy) {
-        let a = (ix * 1836311903) ^ (iy * 2971215073) ^ 123456789;
-        a = (a ^ (a << 13)) ^ (a >> 17);
-        return ((a * 354568339) & 0x7fffffff) / 0x7fffffff;
-    }
-
-    function smooth(t) {
-        return t * t * t * (t * (t * 6 - 15) + 10);
-    }
-
+    function random(ix, iy) { let a = (ix * 1836311903) ^ (iy * 2971215073) ^ 123456789; a = (a ^ (a << 13)) ^ (a >> 17); return ((a * 354568339) & 0x7fffffff) / 0x7fffffff; }
+    function smooth(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
     function valueNoise(x, y) {
-        const ix = Math.floor(x);
-        const iy = Math.floor(y);
-        const fx = x - ix;
-        const fy = y - iy;
-
-        const v00 = random(ix, iy);
-        const v10 = random(ix + 1, iy);
-        const v01 = random(ix, iy + 1);
-        const v11 = random(ix + 1, iy + 1);
-
-        const u = smooth(fx);
-        const v = smooth(fy);
-
-        const v0 = v00 * (1 - u) + v10 * u;
-        const v1 = v01 * (1 - u) + v11 * u;
+        const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy;
+        const v00 = random(ix, iy), v10 = random(ix + 1, iy), v01 = random(ix, iy + 1), v11 = random(ix + 1, iy + 1);
+        const u = smooth(fx), v = smooth(fy);
+        const v0 = v00 * (1 - u) + v10 * u, v1 = v01 * (1 - u) + v11 * u;
         return v0 * (1 - v) + v1 * v;
     }
-
     function perlinNoise(x, y, freq = 0.02, amplitude = 0.5, octaves = 4) {
-        let noiseValue = 0;
-        let amp = amplitude;
-        let f = freq;
-        let maxAmp = 0;
-        for (let i = 0; i < octaves; i++) {
-            noiseValue += valueNoise(x * f, y * f) * amp;
-            maxAmp += amp;
-            amp *= 0.5;
-            f *= 2.0;
-        }
-        return noiseValue / maxAmp;
+        let noise = 0, amp = amplitude, f = freq, maxAmp = 0;
+        for (let i = 0; i < octaves; i++) { noise += valueNoise(x * f, y * f) * amp; maxAmp += amp; amp *= 0.5; f *= 2.0; }
+        return noise / maxAmp;
     }
-
-    // ----- 重新分配陣列 -----
-    function reallocateArrays(newWidth, newHeight) {
-        const newTotal = newWidth * newHeight;
-        u = new Float32Array(newTotal);
-        v = new Float32Array(newTotal);
-        u_next = new Float32Array(newTotal);
-        v_next = new Float32Array(newTotal);
-        width = newWidth;
-        height = newHeight;
-        totalPixels = newTotal;
-    }
-
-    // ----- 起始圖案初始化 -----
+    function reallocateArrays(w, h) { let total = w * h; u = new Float32Array(total); v = new Float32Array(total); u_next = new Float32Array(total); v_next = new Float32Array(total); width = w; height = h; totalPixels = total; }
     function initFieldByShape(shape) {
-        for (let i = 0; i < totalPixels; i++) {
-            u[i] = 1.0;
-            v[i] = 0.0;
-        }
-
-        const cx = Math.floor(width / 2);
-        const cy = Math.floor(height / 2);
-        const minDim = Math.min(width, height);
+        for (let i = 0; i < totalPixels; i++) { u[i] = 1.0; v[i] = 0.0; }
+        const cx = Math.floor(width / 2), cy = Math.floor(height / 2), minDim = Math.min(width, height);
         const addNoise = () => 0.02 * (Math.random() - 0.5);
-
-        switch (shape) {
-            case 'square': {
-                const half = Math.max(4, Math.floor(minDim * 0.06));
-                for (let y = cy - half; y <= cy + half; y++) {
-                    for (let x = cx - half; x <= cx + half; x++) {
-                        if (x >= 0 && x < width && y >= 0 && y < height) {
-                            const idx = y * width + x;
-                            v[idx] = 1.0 + addNoise();
-                        }
-                    }
-                }
-                break;
-            }
-            case 'circle': {
-                const radius = Math.max(5, Math.floor(minDim * 0.07));
-                for (let y = 0; y < height; y++) {
-                    for (let x = 0; x < width; x++) {
-                        const dx = x - cx;
-                        const dy = y - cy;
-                        if (dx * dx + dy * dy <= radius * radius) {
-                            const idx = y * width + x;
-                            v[idx] = 1.0 + addNoise();
-                        }
-                    }
-                }
-                break;
-            }
-            case 'ring': {
-                const r1 = Math.max(3, Math.floor(minDim * 0.04));
-                const r2 = Math.max(6, Math.floor(minDim * 0.09));
-                for (let y = 0; y < height; y++) {
-                    for (let x = 0; x < width; x++) {
-                        const dx = x - cx;
-                        const dy = y - cy;
-                        const d2 = dx * dx + dy * dy;
-                        if (d2 >= r1 * r1 && d2 <= r2 * r2) {
-                            const idx = y * width + x;
-                            v[idx] = 1.0 + addNoise();
-                        }
-                    }
-                }
-                break;
-            }
-            case 'random': {
-                const numPoints = Math.floor(totalPixels / 2000) + 10;
-                const pointRadius = Math.max(2, Math.floor(minDim * 0.012));
-                for (let p = 0; p < numPoints; p++) {
-                    const px = Math.floor(Math.random() * width);
-                    const py = Math.floor(Math.random() * height);
-                    for (let dy = -pointRadius; dy <= pointRadius; dy++) {
-                        for (let dx = -pointRadius; dx <= pointRadius; dx++) {
-                            const x = px + dx;
-                            const y = py + dy;
-                            if (x >= 0 && x < width && y >= 0 && y < height) {
-                                if (dx*dx + dy*dy <= pointRadius*pointRadius) {
-                                    const idx = y * width + x;
-                                    v[idx] = 1.0 + addNoise();
-                                }
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-            case 'stripes': {
-                const spacing = Math.max(8, Math.floor(minDim * 0.1));
-                const stripeWidth = Math.max(2, Math.floor(minDim * 0.02));
-                for (let y = 0; y < height; y++) {
-                    const stripeCenter = (Math.floor(y / spacing) * spacing) + spacing/2;
-                    if (Math.abs(y - stripeCenter) < stripeWidth/2) {
-                        for (let x = 0; x < width; x++) {
-                            const idx = y * width + x;
-                            v[idx] = 1.0 + addNoise();
-                        }
-                    }
-                }
-                const extraPoints = Math.floor(totalPixels / 4000) + 5;
-                for (let i = 0; i < extraPoints; i++) {
-                    const x = Math.floor(Math.random() * width);
-                    const y = Math.floor(Math.random() * height);
-                    v[y * width + x] = 1.0 + addNoise();
-                }
-                break;
-            }
-            case 'perlin': {
-                const offsetX = Math.random() * 10000;
-                const offsetY = Math.random() * 10000;
-                const freq = 3.0 / minDim;
-                const threshold = 0.5;
-                for (let y = 0; y < height; y++) {
-                    for (let x = 0; x < width; x++) {
-                        const idx = y * width + x;
-                        let n = perlinNoise(x + offsetX, y + offsetY, freq, 0.8, 4);
-                        v[idx] = n > threshold ? 1.0 : 0.0;
-                    }
-                }
-                break;
-            }
-            default: {
-                const half = Math.max(4, Math.floor(minDim * 0.06));
-                for (let y = cy - half; y <= cy + half; y++) {
-                    for (let x = cx - half; x <= cx + half; x++) {
-                        if (x >= 0 && x < width && y >= 0 && y < height) {
-                            const idx = y * width + x;
-                            v[idx] = 1.0 + addNoise();
-                        }
-                    }
-                }
-            }
-        }
-
-        for (let i = 0; i < totalPixels; i++) {
-            if (v[i] < 0) v[i] = 0;
-            if (v[i] > 1) v[i] = 1;
-        }
+        if (shape === 'square') { const half = Math.max(4, Math.floor(minDim * 0.06)); for (let y = cy - half; y <= cy + half; y++) for (let x = cx - half; x <= cx + half; x++) if (x>=0 && x<width && y>=0 && y<height) v[y*width+x] = 1.0 + addNoise(); }
+        else if (shape === 'circle') { const r = Math.max(5, Math.floor(minDim * 0.07)); for (let y=0;y<height;y++) for (let x=0;x<width;x++) { const dx=x-cx, dy=y-cy; if (dx*dx+dy*dy <= r*r) v[y*width+x] = 1.0 + addNoise(); } }
+        else if (shape === 'ring') { const r1 = Math.max(3, Math.floor(minDim * 0.04)), r2 = Math.max(6, Math.floor(minDim * 0.09)); for (let y=0;y<height;y++) for (let x=0;x<width;x++) { const dx=x-cx, dy=y-cy, d2=dx*dx+dy*dy; if (d2 >= r1*r1 && d2 <= r2*r2) v[y*width+x] = 1.0 + addNoise(); } }
+        else if (shape === 'random') { const num = Math.floor(totalPixels/2000)+10, pr = Math.max(2, Math.floor(minDim*0.012)); for (let p=0;p<num;p++) { const px = Math.floor(Math.random()*width), py = Math.floor(Math.random()*height); for (let dy=-pr;dy<=pr;dy++) for (let dx=-pr;dx<=pr;dx++) { const x=px+dx, y=py+dy; if (x>=0 && x<width && y>=0 && y<height && dx*dx+dy*dy<=pr*pr) v[y*width+x] = 1.0 + addNoise(); } } }
+        else if (shape === 'stripes') { const sp = Math.max(8, Math.floor(minDim*0.1)), sw = Math.max(2, Math.floor(minDim*0.02)); for (let y=0;y<height;y++) { const sc = (Math.floor(y/sp)*sp)+sp/2; if (Math.abs(y-sc) < sw/2) for (let x=0;x<width;x++) v[y*width+x] = 1.0 + addNoise(); } const extra = Math.floor(totalPixels/4000)+5; for (let i=0;i<extra;i++) { const x=Math.floor(Math.random()*width), y=Math.floor(Math.random()*height); v[y*width+x] = 1.0 + addNoise(); } }
+        else if (shape === 'perlin') { const ox = Math.random()*10000, oy = Math.random()*10000, freq = 3.0/minDim; for (let y=0;y<height;y++) for (let x=0;x<width;x++) { let n = perlinNoise(x+ox, y+oy, freq, 0.8, 4); v[y*width+x] = n > 0.5 ? 1.0 : 0.0; } }
+        else { const half = Math.max(4, Math.floor(minDim*0.06)); for (let y=cy-half;y<=cy+half;y++) for (let x=cx-half;x<=cx+half;x++) if (x>=0 && x<width && y>=0 && y<height) v[y*width+x] = 1.0 + addNoise(); }
+        for (let i=0;i<totalPixels;i++) { if (v[i]<0) v[i]=0; if (v[i]>1) v[i]=1; }
     }
-
-    // ----- 重置 -----
-    function resetField() {
-        initFieldByShape(currentShape);
-        u_next.set(u);
-        v_next.set(v);
-        render();
+    function resetField() { initFieldByShape(currentShape); u_next.set(u); v_next.set(v); render(); }
+    function getNeighbor(arr, x, y, dx, dy, isU) {
+        const nx = x+dx, ny = y+dy;
+        if (nx>=0 && nx<width && ny>=0 && ny<height) return arr[ny*width+nx];
+        if (boundaryType === 'periodic') { const wx = (nx+width)%width, wy = (ny+height)%height; return arr[wy*width+wx]; }
+        if (boundaryType === 'dirichlet') return isU ? 1.0 : 0.0;
+        return arr[y*width+x];
     }
-
-    // ----- 邊界處理 -----
-    function getNeighbor(arr, x, y, dx, dy, isU = true) {
-        const nx = x + dx;
-        const ny = y + dy;
-
-        if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-            return arr[ny * width + nx];
-        }
-
-        switch (boundaryType) {
-            case 'periodic': {
-                const wx = (nx + width) % width;
-                const wy = (ny + height) % height;
-                return arr[wy * width + wx];
-            }
-            case 'dirichlet': {
-                return isU ? 1.0 : 0.0;
-            }
-            case 'neumann':
-            default: {
-                return arr[y * width + x];
-            }
-        }
-    }
-
-    // ----- Gray-Scott 單步 -----
     function grayScottStep() {
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const idx = y * width + x;
-
-                const uL = getNeighbor(u, x, y, -1, 0, true);
-                const uR = getNeighbor(u, x, y, 1, 0, true);
-                const uU = getNeighbor(u, x, y, 0, -1, true);
-                const uD = getNeighbor(u, x, y, 0, 1, true);
-                const uC = u[idx];
-                const laplU = (uL + uR + uU + uD) - 4 * uC;
-
-                const vL = getNeighbor(v, x, y, -1, 0, false);
-                const vR = getNeighbor(v, x, y, 1, 0, false);
-                const vU = getNeighbor(v, x, y, 0, -1, false);
-                const vD = getNeighbor(v, x, y, 0, 1, false);
-                const vC = v[idx];
-                const laplV = (vL + vR + vU + vD) - 4 * vC;
-
-                const uvv = uC * vC * vC;
-
-                let newU = uC + Du * laplU - uvv + feed * (1 - uC);
-                let newV = vC + Dv * laplV + uvv - (feed + kill) * vC;
-
-                if (newU < 0) newU = 0;
-                if (newU > 1) newU = 1;
-                if (newV < 0) newV = 0;
-                if (newV > 1) newV = 1;
-
-                u_next[idx] = newU;
-                v_next[idx] = newV;
-            }
+        for (let y=0;y<height;y++) for (let x=0;x<width;x++) {
+            const idx = y*width+x;
+            const uL = getNeighbor(u,x,y,-1,0,true), uR = getNeighbor(u,x,y,1,0,true), uU = getNeighbor(u,x,y,0,-1,true), uD = getNeighbor(u,x,y,0,1,true), uC = u[idx];
+            const laplU = (uL+uR+uU+uD) - 4*uC;
+            const vL = getNeighbor(v,x,y,-1,0,false), vR = getNeighbor(v,x,y,1,0,false), vU = getNeighbor(v,x,y,0,-1,false), vD = getNeighbor(v,x,y,0,1,false), vC = v[idx];
+            const laplV = (vL+vR+vU+vD) - 4*vC;
+            const uvv = uC * vC * vC;
+            let newU = uC + Du*laplU - uvv + feed*(1-uC);
+            let newV = vC + Dv*laplV + uvv - (feed+kill)*vC;
+            if (newU<0) newU=0; if (newU>1) newU=1; if (newV<0) newV=0; if (newV>1) newV=1;
+            u_next[idx] = newU; v_next[idx] = newV;
         }
-
-        [u, u_next] = [u_next, u];
-        [v, v_next] = [v_next, v];
+        [u, u_next] = [u_next, u]; [v, v_next] = [v_next, v];
     }
-
-    // ----- 渲染 (黑底藍紋) -----
     function render() {
-        const imageData = ctx.createImageData(width, height);
-        const data = imageData.data;
-
-        for (let i = 0; i < totalPixels; i++) {
+        const img = ctx.createImageData(width, height);
+        const data = img.data;
+        for (let i=0;i<totalPixels;i++) {
             const val = v[i];
-            // 黑底藍紋：從黑色到亮藍色（帶點青色）
-            const r = 0;
-            const g = Math.floor(150 * val); // 綠色分量增加青藍色調
-            const b = Math.floor(255 * val);  // 藍色主導
-            // 限制範圍
-            const R = Math.min(255, Math.max(0, r));
-            const G = Math.min(255, Math.max(0, g));
-            const B = Math.min(255, Math.max(0, b));
-
-            const offset = i * 4;
-            data[offset] = R;
-            data[offset + 1] = G;
-            data[offset + 2] = B;
-            data[offset + 3] = 255;
+            const r = 0, g = Math.floor(150*val), b = Math.floor(255*val);
+            const offset = i*4;
+            data[offset]=r; data[offset+1]=g; data[offset+2]=b; data[offset+3]=255;
         }
-        ctx.putImageData(imageData, 0, 0);
+        ctx.putImageData(img,0,0);
     }
+    function exportGray() { /* 同之前，略寫保持簡潔，功能不變 */ const oc = document.createElement('canvas'); oc.width=width; oc.height=height; const octx=oc.getContext('2d'); const id=octx.createImageData(width,height); const d=id.data; for(let i=0;i<totalPixels;i++){const g=Math.floor(v[i]*255); d[i*4]=g; d[i*4+1]=g; d[i*4+2]=g; d[i*4+3]=255;} octx.putImageData(id,0,0); const a=document.createElement('a'); a.download=`turing_gray_${width}x${height}_${Date.now()}.png`; a.href=oc.toDataURL(); a.click(); }
+    function exportBinary() { const oc=document.createElement('canvas'); oc.width=width; oc.height=height; const octx=oc.getContext('2d'); const id=octx.createImageData(width,height); const d=id.data; for(let i=0;i<totalPixels;i++){const val=v[i]>0.5?255:0; d[i*4]=val; d[i*4+1]=val; d[i*4+2]=val; d[i*4+3]=255;} octx.putImageData(id,0,0); const a=document.createElement('a'); a.download=`turing_binary_${width}x${height}_${Date.now()}.png`; a.href=oc.toDataURL(); a.click(); }
+    function animate() { if(isRunning) { for(let s=0;s<stepsPerFrame;s++) grayScottStep(); render(); } animationId = requestAnimationFrame(animate); }
+    function togglePause() { isRunning = !isRunning; updatePauseUI(); }
+    function updatePauseUI() { const pb=document.getElementById('pauseBtn'), st=document.getElementById('statusText'), sd=document.getElementById('statusDot'); if(isRunning){ pb.innerHTML=translations[currentLang]['pause_btn']; st.innerHTML=translations[currentLang]['status_running']; sd.className='status-dot'; } else { pb.innerHTML=translations[currentLang]['resume_btn']; st.innerHTML=translations[currentLang]['status_paused']; sd.className='status-dot paused'; } }
+    function updateParamsFromUI() { feed=parseFloat(feedSlider.value); kill=parseFloat(killSlider.value); Du=parseFloat(duSlider.value); Dv=parseFloat(dvSlider.value); stepsPerFrame=parseInt(stepSlider.value,10); feedSpan.innerText=feed.toFixed(3); killSpan.innerText=kill.toFixed(3); duSpan.innerText=Du.toFixed(3); dvSpan.innerText=Dv.toFixed(3); stepSpan.innerText=stepsPerFrame; }
+    function setShape(shape) { if(shape===currentShape) return; currentShape=shape; shapeBtns.forEach(btn=>{ if(btn.dataset.shape===shape) btn.classList.add('active'); else btn.classList.remove('active'); }); resetField(); }
+    function setBoundary(type) { if(type===boundaryType) return; boundaryType=type; boundaryBtns.forEach(btn=>{ if(btn.dataset.boundary===type) btn.classList.add('active'); else btn.classList.remove('active'); }); }
+    function resizeCanvas() { const nw=parseInt(widthSlider.value,10), nh=parseInt(heightSlider.value,10); if(nw===width && nh===height) return; widthSpan.innerText=nw; heightSpan.innerText=nh; canvas.width=nw; canvas.height=nh; reallocateArrays(nw,nh); initFieldByShape(currentShape); u_next.set(u); v_next.set(v); render(); }
 
-    // ----- 輸出灰度圖 -----
-    function exportGray() {
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = width;
-        offCanvas.height = height;
-        const offCtx = offCanvas.getContext('2d');
-        const imageData = offCtx.createImageData(width, height);
-        const data = imageData.data;
+    const widthSlider=document.getElementById('widthSlider'), heightSlider=document.getElementById('heightSlider');
+    const widthSpan=document.getElementById('widthVal'), heightSpan=document.getElementById('heightVal');
+    const feedSlider=document.getElementById('feedSlider'), killSlider=document.getElementById('killSlider'), duSlider=document.getElementById('duSlider'), dvSlider=document.getElementById('dvSlider'), stepSlider=document.getElementById('stepSlider');
+    const feedSpan=document.getElementById('feedVal'), killSpan=document.getElementById('killVal'), duSpan=document.getElementById('duVal'), dvSpan=document.getElementById('dvVal'), stepSpan=document.getElementById('stepVal');
+    const resetBtn=document.getElementById('resetBtn'), pauseBtn=document.getElementById('pauseBtn'), exportGrayBtn=document.getElementById('exportGrayBtn'), exportBinaryBtn=document.getElementById('exportBinaryBtn');
+    const shapeBtns=document.querySelectorAll('.shape-btn'), boundaryBtns=document.querySelectorAll('.boundary-btn'), langBtns=document.querySelectorAll('.lang-btn');
 
-        for (let i = 0; i < totalPixels; i++) {
-            const val = v[i];
-            const gray = Math.floor(val * 255);
-            const offset = i * 4;
-            data[offset] = gray;
-            data[offset + 1] = gray;
-            data[offset + 2] = gray;
-            data[offset + 3] = 255;
-        }
-        offCtx.putImageData(imageData, 0, 0);
+    widthSlider.addEventListener('change',resizeCanvas); heightSlider.addEventListener('change',resizeCanvas);
+    widthSlider.addEventListener('input',()=>{widthSpan.innerText=widthSlider.value;}); heightSlider.addEventListener('input',()=>{heightSpan.innerText=heightSlider.value;});
+    feedSlider.addEventListener('input',()=>{feedSpan.innerText=feedSlider.value; feed=parseFloat(feedSlider.value);});
+    killSlider.addEventListener('input',()=>{killSpan.innerText=killSlider.value; kill=parseFloat(killSlider.value);});
+    duSlider.addEventListener('input',()=>{duSpan.innerText=duSlider.value; Du=parseFloat(duSlider.value);});
+    dvSlider.addEventListener('input',()=>{dvSpan.innerText=dvSlider.value; Dv=parseFloat(dvSlider.value);});
+    stepSlider.addEventListener('input',()=>{stepSpan.innerText=stepSlider.value; stepsPerFrame=parseInt(stepSlider.value,10);});
+    shapeBtns.forEach(btn=>btn.addEventListener('click',()=>setShape(btn.dataset.shape)));
+    boundaryBtns.forEach(btn=>btn.addEventListener('click',()=>setBoundary(btn.dataset.boundary)));
+    resetBtn.addEventListener('click',resetField); pauseBtn.addEventListener('click',togglePause);
+    exportGrayBtn.addEventListener('click',exportGray); exportBinaryBtn.addEventListener('click',exportBinary);
+    langBtns.forEach(btn=>btn.addEventListener('click',()=>updateLanguage(btn.dataset.lang)));
 
-        const link = document.createElement('a');
-        link.download = `turing_gray_${width}x${height}_${Date.now()}.png`;
-        link.href = offCanvas.toDataURL('image/png');
-        link.click();
-    }
-
-    // ----- 輸出二值圖 -----
-    function exportBinary() {
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = width;
-        offCanvas.height = height;
-        const offCtx = offCanvas.getContext('2d');
-        const imageData = offCtx.createImageData(width, height);
-        const data = imageData.data;
-        const threshold = 0.5;
-
-        for (let i = 0; i < totalPixels; i++) {
-            const val = v[i] > threshold ? 255 : 0;
-            const offset = i * 4;
-            data[offset] = val;
-            data[offset + 1] = val;
-            data[offset + 2] = val;
-            data[offset + 3] = 255;
-        }
-        offCtx.putImageData(imageData, 0, 0);
-
-        const link = document.createElement('a');
-        link.download = `turing_binary_${width}x${height}_${Date.now()}.png`;
-        link.href = offCanvas.toDataURL('image/png');
-        link.click();
-    }
-
-    // ----- 動畫循環 -----
-    function animate() {
-        if (isRunning) {
-            for (let s = 0; s < stepsPerFrame; s++) {
-                grayScottStep();
-            }
-            render();
-        }
-        animationId = requestAnimationFrame(animate);
-    }
-
-    // ----- 暫停/繼續 -----
-    function togglePause() {
-        isRunning = !isRunning;
-        updatePauseUI();
-    }
-
-    function updatePauseUI() {
-        const pauseBtn = document.getElementById('pauseBtn');
-        const statusEl = document.getElementById('statusText');
-        if (isRunning) {
-            pauseBtn.innerHTML = translations[currentLang]['pause_btn'];
-            statusEl.innerHTML = translations[currentLang]['status_running'];
-            statusDot.className = 'status-dot';
-        } else {
-            pauseBtn.innerHTML = translations[currentLang]['resume_btn'];
-            statusEl.innerHTML = translations[currentLang]['status_paused'];
-            statusDot.className = 'status-dot paused';
-        }
-    }
-
-    // ----- 更新參數從滑桿 -----
-    function updateParamsFromUI() {
-        feed = parseFloat(feedSlider.value);
-        kill = parseFloat(killSlider.value);
-        Du = parseFloat(duSlider.value);
-        Dv = parseFloat(dvSlider.value);
-        stepsPerFrame = parseInt(stepSlider.value, 10);
-
-        feedSpan.innerText = feed.toFixed(3);
-        killSpan.innerText = kill.toFixed(3);
-        duSpan.innerText = Du.toFixed(3);
-        dvSpan.innerText = Dv.toFixed(3);
-        stepSpan.innerText = stepsPerFrame;
-    }
-
-    // ----- 切換起始圖案 -----
-    function setShape(shape) {
-        if (shape === currentShape) return;
-        currentShape = shape;
-
-        shapeBtns.forEach(btn => {
-            if (btn.dataset.shape === shape) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        resetField();
-    }
-
-    // ----- 切換邊界條件 -----
-    function setBoundary(type) {
-        if (type === boundaryType) return;
-        boundaryType = type;
-
-        boundaryBtns.forEach(btn => {
-            if (btn.dataset.boundary === type) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
-
-    // ----- 改變畫布尺寸 -----
-    function resizeCanvas() {
-        const newWidth = parseInt(widthSlider.value, 10);
-        const newHeight = parseInt(heightSlider.value, 10);
-
-        if (newWidth === width && newHeight === height) return;
-
-        widthSpan.innerText = newWidth;
-        heightSpan.innerText = newHeight;
-
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-
-        reallocateArrays(newWidth, newHeight);
-        initFieldByShape(currentShape);
-        u_next.set(u);
-        v_next.set(v);
-
-        render();
-    }
-
-    // ----- 事件綁定 -----
-    widthSlider.addEventListener('change', resizeCanvas);
-    heightSlider.addEventListener('change', resizeCanvas);
-    widthSlider.addEventListener('input', () => { widthSpan.innerText = widthSlider.value; });
-    heightSlider.addEventListener('input', () => { heightSpan.innerText = heightSlider.value; });
-
-    feedSlider.addEventListener('input', () => {
-        feedSpan.innerText = feedSlider.value;
-        feed = parseFloat(feedSlider.value);
-    });
-    killSlider.addEventListener('input', () => {
-        killSpan.innerText = killSlider.value;
-        kill = parseFloat(killSlider.value);
-    });
-    duSlider.addEventListener('input', () => {
-        duSpan.innerText = duSlider.value;
-        Du = parseFloat(duSlider.value);
-    });
-    dvSlider.addEventListener('input', () => {
-        dvSpan.innerText = dvSlider.value;
-        Dv = parseFloat(dvSlider.value);
-    });
-    stepSlider.addEventListener('input', () => {
-        stepSpan.innerText = stepSlider.value;
-        stepsPerFrame = parseInt(stepSlider.value, 10);
-    });
-
-    shapeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            setShape(btn.dataset.shape);
-        });
-    });
-
-    boundaryBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            setBoundary(btn.dataset.boundary);
-        });
-    });
-
-    resetBtn.addEventListener('click', resetField);
-    pauseBtn.addEventListener('click', togglePause);
-
-    // 輸出按鈕
-    exportGrayBtn.addEventListener('click', exportGray);
-    exportBinaryBtn.addEventListener('click', exportBinary);
-
-    // 語言切換
-    langBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            updateLanguage(btn.dataset.lang);
-        });
-    });
-
-    // 初始化
-    updateParamsFromUI();
-    initFieldByShape(currentShape);
-    u_next.set(u);
-    v_next.set(v);
-    render();
-    const savedLang = localStorage.getItem('turingLang') || 'zh-TW';
-    updateLanguage(savedLang);
-
-    function startAnimation() {
-        if (animationId) cancelAnimationFrame(animationId);
-        animationId = requestAnimationFrame(animate);
-    }
-    startAnimation();
-
-    window.addEventListener('beforeunload', () => {
-        if (animationId) cancelAnimationFrame(animationId);
-    });
-
+    updateParamsFromUI(); initFieldByShape(currentShape); u_next.set(u); v_next.set(v); render();
+    const savedLang = localStorage.getItem('turingLang') || 'zh-TW'; updateLanguage(savedLang);
+    function startAnimation() { if(animationId) cancelAnimationFrame(animationId); animationId = requestAnimationFrame(animate); } startAnimation();
+    window.addEventListener('beforeunload',()=>{if(animationId) cancelAnimationFrame(animationId);});
     updatePauseUI();
 })();
 </script>
