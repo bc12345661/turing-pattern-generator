@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>圖靈斑圖 · 科技黑藍 | 移動適配版</title>
+    <title>圖靈斑圖 </title>
     <style>
         * {
             box-sizing: border-box;
@@ -587,7 +587,7 @@
     // 多語言支援 (與之前相同，此處省略冗餘，保持功能一致)
     const translations = {
         'zh-TW': {
-            'title': '⚡ 圖靈斑圖 · 科技黑藍 ⚡',
+            'title': ' 圖靈斑圖',
             'subtitle': '零通量 · 週期性 · 固定邊界 · 二值柏林',
             'width_label': '📏 寬度',
             'height_label': '📐 高度',
@@ -614,7 +614,7 @@
             'footer': '⇦ 點擊輸出按鈕保存當前斑圖 (PNG 格式) ⇨'
         },
         'zh-CN': {
-            'title': '⚡ 图灵斑图 · 科技黑蓝 ⚡',
+            'title': ' 图灵斑图 ',
             'subtitle': '零通量 · 周期性 · 固定边界 · 二值柏林',
             'width_label': '📏 宽度',
             'height_label': '📐 高度',
@@ -641,7 +641,7 @@
             'footer': '⇦ 点击输出按钮保存当前斑图 (PNG 格式) ⇨'
         },
         'en': {
-            'title': '⚡ Turing Patterns · Tech Blue ⚡',
+            'title': 'Turing Patterns',
             'subtitle': 'Neumann · Periodic · Dirichlet · Binary Perlin',
             'width_label': '📏 Width',
             'height_label': '📐 Height',
@@ -771,7 +771,7 @@
         ctx.putImageData(img,0,0);
     }
     function exportGray() { /* 同之前，略寫保持簡潔，功能不變 */ const oc = document.createElement('canvas'); oc.width=width; oc.height=height; const octx=oc.getContext('2d'); const id=octx.createImageData(width,height); const d=id.data; for(let i=0;i<totalPixels;i++){const g=Math.floor(v[i]*255); d[i*4]=g; d[i*4+1]=g; d[i*4+2]=g; d[i*4+3]=255;} octx.putImageData(id,0,0); const a=document.createElement('a'); a.download=`turing_gray_${width}x${height}_${Date.now()}.png`; a.href=oc.toDataURL(); a.click(); }
-    function exportBinary() { const oc=document.createElement('canvas'); oc.width=width; oc.height=height; const octx=oc.getContext('2d'); const id=octx.createImageData(width,height); const d=id.data; for(let i=0;i<totalPixels;i++){const val=v[i]>0.5?255:0; d[i*4]=val; d[i*4+1]=val; d[i*4+2]=val; d[i*4+3]=255;} octx.putImageData(id,0,0); const a=document.createElement('a'); a.download=`turing_binary_${width}x${height}_${Date.now()}.png`; a.href=oc.toDataURL(); a.click(); }
+    function exportBinary() { const oc=document.createElement('canvas'); oc.width=width; oc.height=height; const octx=oc.getContext('2d'); const id=octx.createImageData(width,height); const d=id.data; for(let i=0;i<totalPixels;i++){const val=v[i]>0.2?255:0; d[i*4]=val; d[i*4+1]=val; d[i*4+2]=val; d[i*4+3]=255;} octx.putImageData(id,0,0); const a=document.createElement('a'); a.download=`turing_binary_${width}x${height}_${Date.now()}.png`; a.href=oc.toDataURL(); a.click(); }
     function animate() { if(isRunning) { for(let s=0;s<stepsPerFrame;s++) grayScottStep(); render(); } animationId = requestAnimationFrame(animate); }
     function togglePause() { isRunning = !isRunning; updatePauseUI(); }
     function updatePauseUI() { const pb=document.getElementById('pauseBtn'), st=document.getElementById('statusText'), sd=document.getElementById('statusDot'); if(isRunning){ pb.innerHTML=translations[currentLang]['pause_btn']; st.innerHTML=translations[currentLang]['status_running']; sd.className='status-dot'; } else { pb.innerHTML=translations[currentLang]['resume_btn']; st.innerHTML=translations[currentLang]['status_paused']; sd.className='status-dot paused'; } }
